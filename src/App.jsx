@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 import AppShell from './layouts/AppShell';
 
 import LoginPage from './pages/shared/LoginPage';
@@ -41,6 +41,12 @@ import GradeFeedbackPage from './pages/student/GradeFeedbackPage';
 
 const Shell = ({ children }) => <AppShell>{children}</AppShell>;
 
+function StudentOnlyExperience({ mode }) {
+  const { role } = useParams();
+  if (role !== 'student') return <Navigate to={`/${role || 'student'}`} replace />;
+  return <Shell><ExperienceHubPage mode={mode} /></Shell>;
+}
+
 export default function App() {
   return (
     <Routes>
@@ -50,8 +56,8 @@ export default function App() {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/first-login" element={<FirstLoginSetupPage />} />
 
-      <Route path="/:role/ai" element={<Shell><ExperienceHubPage mode="ai" /></Shell>} />
-      <Route path="/:role/assessments" element={<Shell><ExperienceHubPage mode="assessments" /></Shell>} />
+      <Route path="/:role/ai" element={<StudentOnlyExperience mode="ai" />} />
+      <Route path="/:role/assessments" element={<StudentOnlyExperience mode="assessments" />} />
       <Route path="/:role/meet" element={<Shell><ExperienceHubPage mode="meet" /></Shell>} />
       <Route path="/:role/wallet" element={<Shell><ExperienceHubPage mode="wallet" /></Shell>} />
 

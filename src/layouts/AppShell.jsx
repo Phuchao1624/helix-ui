@@ -55,7 +55,13 @@ export default function AppShell({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
   const role = inferRole(location.pathname);
-  const nav = [...navByRole[role], { to: `/${role}/ai`, label: 'AI Practice', icon: Bot }, { to: `/${role}/assessments`, label: 'Tests', icon: ClipboardList }, ...(role === 'mentor' ? [{ to: '/mentor/meet', label: 'Meet & Attendance', icon: Video }] : [])];
+  const roleExperienceNav = role === 'student'
+    ? [
+      { to: '/student/ai', label: 'AI Practice', icon: Bot },
+      { to: '/student/assessments', label: 'Tests', icon: ClipboardList },
+    ]
+    : [];
+  const nav = [...navByRole[role], ...roleExperienceNav, ...(role === 'mentor' ? [{ to: '/mentor/meet', label: 'Meet & Attendance', icon: Video }] : [])];
   const meta = roleMeta[role];
   const [mobileOpen, setMobileOpen] = useState(false);
   const [roleMenu, setRoleMenu] = useState(false);
