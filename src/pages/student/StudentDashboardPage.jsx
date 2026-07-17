@@ -1,56 +1,78 @@
 import React from 'react';
-import { ArrowRight, BookOpen, CalendarDays, CheckCircle2, Clock3, Flame, PlayCircle, Target, Headphones } from 'lucide-react';
+import { ArrowRight, BookOpen, CalendarDays, CheckCircle2, Clock3, Flame, Headphones, MapPinned, PlayCircle, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Progress, Section, StatusBadge } from '../../components/UI';
+import { Button, Progress } from '../../components/UI';
 import { assignments } from '../../data/mockData';
+
+const completedGoals = ['Tham gia 2 buổi học', 'Hoàn thành bài từ vựng', 'Luyện nói 20 phút'];
 
 export default function StudentDashboardPage() {
   const navigate = useNavigate();
-  return <>
-    <header className="student-welcome">
+  const nextAssignment = assignments.find((assignment) => assignment.status === 'Active');
+
+  return <main className="learning-home">
+    <header className="learning-home__intro">
       <div>
-        <span className="student-welcome__date">THỨ TƯ · 15 THÁNG 7, 2026</span>
-        <h1>Chào Minh Anh, hôm nay mình tiến thêm một bước.</h1>
-        <p>Một buổi học lúc 19:00 và hai bài tập đang chờ bạn hoàn thành.</p>
+        <span className="eyebrow">THỨ TƯ · 15 THÁNG 7, 2026</span>
+        <h1>Chào Minh Anh.</h1>
+        <p>Bạn có một buổi học lúc 19:00. Hãy dành 20 phút để sẵn sàng cho phần nói hôm nay.</p>
       </div>
-      <div className="student-welcome__focus"><Target size={18} /><span><small>Mục tiêu hôm nay</small><strong>Luyện nói 20 phút</strong></span></div>
+      <div className="learning-home__streak" aria-label="Chuỗi học sáu ngày">
+        <Flame size={18} /><span><strong>6 ngày</strong><small>giữ nhịp học</small></span>
+      </div>
     </header>
 
-    <section className="student-hero">
-      <div className="student-hero__content">
-        <div className="student-hero__topline"><span>BUỔI HỌC TIẾP THEO</span><b>EVERYDAY ENGLISH A2</b></div>
-        <h2>Unit 6<br />Giving directions</h2>
-        <p>Cùng luyện cách hỏi đường, chỉ dẫn và mô tả địa điểm trong thành phố.</p>
-        <div className="student-hero__meta">
-          <span><CalendarDays size={17} />Thứ Năm, 16/07</span>
-          <span><Clock3 size={17} />19:00–20:30</span>
-          <span><PlayCircle size={17} />Google Meet</span>
+    <section className="learning-next" aria-labelledby="next-session-title">
+      <div className="learning-next__main">
+        <div className="helix-marker helix-marker--light" aria-hidden="true"><i /><i /><i /></div>
+        <span className="eyebrow eyebrow--light">LẦN HỌC TIẾP THEO · EVERYDAY ENGLISH A2</span>
+        <h2 id="next-session-title">Unit 6<br />Giving directions</h2>
+        <p>Thực hành hỏi đường, chỉ dẫn và mô tả địa điểm trong thành phố bằng tiếng Anh tự nhiên.</p>
+        <div className="learning-next__meta">
+          <span><CalendarDays size={16} />Thứ Năm, 16/07</span>
+          <span><Clock3 size={16} />19:00–20:30</span>
+          <span><PlayCircle size={16} />Google Meet</span>
         </div>
-        <div className="student-hero__actions">
-          <Button onClick={() => navigate('/student/sessions')}>Vào buổi học</Button>
-          <Button variant="light" icon={Headphones}>Xem học liệu</Button>
+        <div className="learning-next__actions">
+          <Button onClick={() => navigate('/student/sessions')}>Vào buổi học <ArrowRight size={16} /></Button>
+          <Button variant="light" onClick={() => navigate('/student/sessions')}><Headphones size={16} />Học liệu</Button>
         </div>
       </div>
-      <div className="student-hero__schedule">
-        <div className="student-hero__calendar"><span>THÁNG 7</span><strong>16</strong><small>THỨ NĂM</small></div>
-        <div className="student-hero__countdown"><small>Bắt đầu sau</small><strong>02:18</strong><span>GIỜ : PHÚT</span></div>
-      </div>
-      <div className="student-hero__architecture" aria-hidden="true"><i /><i /><i /></div>
+      <aside className="learning-next__when" aria-label="Thời gian buổi học tiếp theo">
+        <span>THÁNG 7</span>
+        <strong>16</strong>
+        <small>THỨ NĂM · 19:00</small>
+        <div><MapPinned size={16} />Trực tuyến · A2-01</div>
+      </aside>
     </section>
 
-    <div className="student-metrics" role="list" aria-label="Tóm tắt tiến độ">
-      <div role="listitem"><span><Flame size={21} /></span><strong>6 ngày</strong><small>Chuỗi học liên tục</small></div>
-      <div role="listitem"><span><CheckCircle2 size={21} /></span><strong>94%</strong><small>Chuyên cần</small></div>
-      <div role="listitem"><span><BookOpen size={21} /></span><strong>68%</strong><small>Tiến độ khoá học</small></div>
-    </div>
+    <section className="learning-home__agenda" aria-label="Việc cần chú ý">
+      <button className="agenda-item agenda-item--assignment" onClick={() => navigate(`/student/assignments/${nextAssignment?.id || 'AS-108'}`)}>
+        <span className="agenda-item__icon"><BookOpen size={20} /></span>
+        <span><small>CẦN HOÀN THÀNH</small><strong>{nextAssignment?.title || 'Voice note: My neighbourhood'}</strong><em>Hạn {nextAssignment?.due || '18/07 · 23:59'}</em></span>
+        <ArrowRight size={19} />
+      </button>
+      <button className="agenda-item agenda-item--course" onClick={() => navigate('/student/courses')}>
+        <span className="agenda-item__icon"><Target size={20} /></span>
+        <span><small>TIẾN ĐỘ KHOÁ HỌC</small><strong>12 / 24 buổi đã hoàn thành</strong><em>Everyday English A2 · 64%</em></span>
+        <ArrowRight size={19} />
+      </button>
+    </section>
 
-    <div className="dashboard-grid dashboard-grid--wide">
-      <Section title="Bài tập cần làm" actions={<Button variant="ghost" onClick={() => navigate('/student/assignments')}>Xem tất cả <ArrowRight size={16} /></Button>}>
-        <div className="student-assignment-list">{assignments.slice(0, 2).map((a) => <button key={a.id} onClick={() => navigate('/student/assignments/as-108')}><span className="student-assignment-list__skill">{a.skill.slice(0,1)}</span><span><strong>{a.title}</strong><small>{a.course} · Hạn {a.due}</small></span><StatusBadge status={a.status} /></button>)}</div>
-      </Section>
-      <Section title="Tiến độ tuần này"><div className="weekly-goal"><div><strong>4 / 5</strong><span>mục tiêu hoàn thành</span></div><Progress value={80} /><ul><li className="is-done">Tham gia 2 buổi học</li><li className="is-done">Hoàn thành bài từ vựng</li><li className="is-done">Luyện nói 20 phút</li><li>Ôn lại Unit 6</li></ul></div></Section>
-    </div>
-
-    <Section title="Khoá học của bạn"><button className="course-row" onClick={() => navigate('/student/courses')}><div className="course-row__icon"><BookOpen size={24} /></div><div><span className="record-code">ENG-A2</span><h3>Everyday English A2</h3><p>Mentor Lê Hoàng Nam · 12/24 buổi</p></div><div className="course-row__progress"><Progress value={64} compact /><strong>64%</strong></div><ArrowRight size={20} /></button></Section>
-  </>;
+    <section className="learning-home__lower">
+      <div className="learning-goals">
+        <div className="section-kicker"><span>MỤC TIÊU TUẦN NÀY</span><strong>4 / 5</strong></div>
+        <Progress value={80} />
+        <div className="learning-goals__list">
+          {completedGoals.map((goal) => <span key={goal}><CheckCircle2 size={16} />{goal}</span>)}
+          <span className="is-next"><i />Ôn lại Unit 6</span>
+        </div>
+      </div>
+      <div className="learning-home__course-link">
+        <div className="helix-marker" aria-hidden="true"><i /><i /><i /></div>
+        <div><span className="eyebrow">ĐANG HỌC</span><h3>Everyday English A2</h3><p>Tiếp tục với bài học, buổi học và học liệu của bạn.</p></div>
+        <Button variant="ghost" onClick={() => navigate('/student/courses')}>Mở khoá học <ArrowRight size={16} /></Button>
+      </div>
+    </section>
+  </main>;
 }

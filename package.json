@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "test:routes": "node scripts/render-previews.mjs",
     "test:e2e": "node scripts/browser-audit.mjs",
+    "test:header": "node scripts/header-regression.mjs compare",
     "test": "npm run test:routes && npm run test:e2e"
   },
   "dependencies": {

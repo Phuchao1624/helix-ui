@@ -39,12 +39,12 @@ import AssignmentListPage from './pages/student/AssignmentListPage';
 import AssignmentDetailPage from './pages/student/AssignmentDetailPage';
 import GradeFeedbackPage from './pages/student/GradeFeedbackPage';
 
-const Shell = ({ children }) => <AppShell>{children}</AppShell>;
+const Shell = ({ children, view }) => <AppShell><div className={`route-canvas route-canvas--${view}`}>{children}</div></AppShell>;
 
 function StudentOnlyExperience({ mode }) {
   const { role } = useParams();
   if (role !== 'student') return <Navigate to={`/${role || 'student'}`} replace />;
-  return <Shell><ExperienceHubPage mode={mode} /></Shell>;
+  return <Shell view={`student-${mode}`}><ExperienceHubPage mode={mode} /></Shell>;
 }
 
 export default function App() {
@@ -58,40 +58,40 @@ export default function App() {
 
       <Route path="/:role/ai" element={<StudentOnlyExperience mode="ai" />} />
       <Route path="/:role/assessments" element={<StudentOnlyExperience mode="assessments" />} />
-      <Route path="/mentor/meet" element={<Shell><ExperienceHubPage mode="meet" /></Shell>} />
-      <Route path="/:role/wallet" element={<Shell><ExperienceHubPage mode="wallet" /></Shell>} />
+      <Route path="/mentor/meet" element={<Shell view="mentor-meet"><ExperienceHubPage mode="meet" /></Shell>} />
+      <Route path="/:role/wallet" element={<Shell view="shared-wallet"><ExperienceHubPage mode="wallet" /></Shell>} />
 
-      <Route path="/profile" element={<Shell><ProfileSettingsPage /></Shell>} />
-      <Route path="/notifications" element={<Shell><NotificationCenterPage /></Shell>} />
+      <Route path="/profile" element={<Shell view="shared-profile"><ProfileSettingsPage /></Shell>} />
+      <Route path="/notifications" element={<Shell view="shared-notifications"><NotificationCenterPage /></Shell>} />
 
-      <Route path="/admin" element={<Shell><AdminDashboardPage /></Shell>} />
-      <Route path="/admin/users" element={<Shell><UserManagementPage /></Shell>} />
-      <Route path="/admin/users/new" element={<Shell><CreateEditUserPage /></Shell>} />
-      <Route path="/admin/users/import" element={<Shell><BulkImportUsersPage /></Shell>} />
-      <Route path="/admin/config" element={<Shell><SystemConfigurationPage /></Shell>} />
+      <Route path="/admin" element={<Shell view="admin-overview"><AdminDashboardPage /></Shell>} />
+      <Route path="/admin/users" element={<Shell view="admin-users"><UserManagementPage /></Shell>} />
+      <Route path="/admin/users/new" element={<Shell view="admin-user-form"><CreateEditUserPage /></Shell>} />
+      <Route path="/admin/users/import" element={<Shell view="admin-user-import"><BulkImportUsersPage /></Shell>} />
+      <Route path="/admin/config" element={<Shell view="admin-config"><SystemConfigurationPage /></Shell>} />
 
-      <Route path="/coordinator" element={<Shell><CoordinatorDashboardPage /></Shell>} />
-      <Route path="/coordinator/programs" element={<Shell><ProgramsPage /></Shell>} />
-      <Route path="/coordinator/programs/:programId" element={<Shell><ProgramDetailPage /></Shell>} />
-      <Route path="/coordinator/courses" element={<Shell><CoursesPage /></Shell>} />
-      <Route path="/coordinator/classes" element={<Shell><ClassesPage /></Shell>} />
-      <Route path="/coordinator/enrollment" element={<Shell><EnrollmentPage /></Shell>} />
+      <Route path="/coordinator" element={<Shell view="coordinator-overview"><CoordinatorDashboardPage /></Shell>} />
+      <Route path="/coordinator/programs" element={<Shell view="coordinator-programs"><ProgramsPage /></Shell>} />
+      <Route path="/coordinator/programs/:programId" element={<Shell view="coordinator-program-detail"><ProgramDetailPage /></Shell>} />
+      <Route path="/coordinator/courses" element={<Shell view="coordinator-courses"><CoursesPage /></Shell>} />
+      <Route path="/coordinator/classes" element={<Shell view="coordinator-classes"><ClassesPage /></Shell>} />
+      <Route path="/coordinator/enrollment" element={<Shell view="coordinator-enrollment"><EnrollmentPage /></Shell>} />
 
-      <Route path="/mentor" element={<Shell><MentorDashboardPage /></Shell>} />
-      <Route path="/mentor/classes" element={<Shell><MyClassesPage /></Shell>} />
-      <Route path="/mentor/classes/:classId" element={<Shell><ClassDetailPage /></Shell>} />
-      <Route path="/mentor/session" element={<Shell><SessionDetailPage /></Shell>} />
-      <Route path="/mentor/attendance" element={<Shell><AttendancePage /></Shell>} />
-      <Route path="/mentor/materials" element={<Shell><MaterialsPage /></Shell>} />
-      <Route path="/mentor/assignments" element={<Shell><AssignmentsPage /></Shell>} />
-      <Route path="/mentor/grading" element={<Shell><GradingPage /></Shell>} />
+      <Route path="/mentor" element={<Shell view="mentor-overview"><MentorDashboardPage /></Shell>} />
+      <Route path="/mentor/classes" element={<Shell view="mentor-classes"><MyClassesPage /></Shell>} />
+      <Route path="/mentor/classes/:classId" element={<Shell view="mentor-class-detail"><ClassDetailPage /></Shell>} />
+      <Route path="/mentor/session" element={<Shell view="mentor-session"><SessionDetailPage /></Shell>} />
+      <Route path="/mentor/attendance" element={<Shell view="mentor-attendance"><AttendancePage /></Shell>} />
+      <Route path="/mentor/materials" element={<Shell view="mentor-materials"><MaterialsPage /></Shell>} />
+      <Route path="/mentor/assignments" element={<Shell view="mentor-assignments"><AssignmentsPage /></Shell>} />
+      <Route path="/mentor/grading" element={<Shell view="mentor-grading"><GradingPage /></Shell>} />
 
-      <Route path="/student" element={<Shell><StudentDashboardPage /></Shell>} />
-      <Route path="/student/courses" element={<Shell><MyCoursesPage /></Shell>} />
-      <Route path="/student/sessions" element={<Shell><SessionsPage /></Shell>} />
-      <Route path="/student/assignments" element={<Shell><AssignmentListPage /></Shell>} />
-      <Route path="/student/assignments/:assignmentId" element={<Shell><AssignmentDetailPage /></Shell>} />
-      <Route path="/student/grades/:assignmentId" element={<Shell><GradeFeedbackPage /></Shell>} />
+      <Route path="/student" element={<Shell view="student-overview"><StudentDashboardPage /></Shell>} />
+      <Route path="/student/courses" element={<Shell view="student-courses"><MyCoursesPage /></Shell>} />
+      <Route path="/student/sessions" element={<Shell view="student-sessions"><SessionsPage /></Shell>} />
+      <Route path="/student/assignments" element={<Shell view="student-assignments"><AssignmentListPage /></Shell>} />
+      <Route path="/student/assignments/:assignmentId" element={<Shell view="student-assignment-detail"><AssignmentDetailPage /></Shell>} />
+      <Route path="/student/grades/:assignmentId" element={<Shell view="student-grade-feedback"><GradeFeedbackPage /></Shell>} />
 
       <Route path="*" element={<Navigate to="/student" replace />} />
     </Routes>

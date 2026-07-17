@@ -13,7 +13,7 @@ export default function ClassesPage() {
     { key: 'students', label: 'Sĩ số' },
     { key: 'next', label: 'Buổi tiếp theo' },
     { key: 'status', label: 'Trạng thái', render: (r) => <StatusBadge status={r.status} /> },
-    { key: 'actions', label: '', render: () => <button className="icon-button"><MoreHorizontal size={18} /></button> },
+    { key: 'actions', label: '', render: (r) => <button className="icon-button" aria-label={`Mở thao tác cho ${r.name}`}><MoreHorizontal size={18} /></button> },
   ];
   return <>
     <PageHeader eyebrow="CO-04 · TAB TRONG COURSE" title="Quản lý lớp học" description="Everyday English A2 · Thiết lập Mentor, sĩ số và lịch học." breadcrumbs="Chương trình / English Foundation 2026 / Everyday English A2 / Lớp học" actions={<Button icon={Plus} onClick={() => setOpen(true)}>Tạo Class</Button>} />

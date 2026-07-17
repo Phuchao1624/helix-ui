@@ -12,7 +12,7 @@ export default function CoursesPage() {
     { key: 'classes', label: 'Lớp' },
     { key: 'students', label: 'Học sinh' },
     { key: 'status', label: 'Trạng thái', render: (r) => <StatusBadge status={r.status} /> },
-    { key: 'actions', label: '', render: () => <button className="icon-button"><MoreHorizontal size={18} /></button> },
+    { key: 'actions', label: '', render: (r) => <button className="icon-button" aria-label={`Mở thao tác cho ${r.name}`}><MoreHorizontal size={18} /></button> },
   ];
   return <>
     <PageHeader eyebrow="CO-03 · TAB TRONG PROGRAM" title="Quản lý khoá học" description="English Foundation 2026 · Xây dựng mục tiêu và cấu trúc lớp học." breadcrumbs="Chương trình / English Foundation 2026 / Khoá học" actions={<Button icon={Plus} onClick={() => setOpen(true)}>Tạo Course</Button>} />
