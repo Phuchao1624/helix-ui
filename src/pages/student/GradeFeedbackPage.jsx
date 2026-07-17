@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Download, History, MessageCircle, Send } from 'lucide-react';
-import { Button, Field, PageHeader, Section, StatusBadge } from '../../components/UI';
+import { Download, History, Send } from 'lucide-react';
+import { Button, PageHeader, Section, StatusBadge } from '../../components/UI';
 
 export default function GradeFeedbackPage() {
   const [comment, setComment] = useState('');

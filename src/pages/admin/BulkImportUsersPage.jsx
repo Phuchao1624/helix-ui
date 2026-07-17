@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight, CheckCircle2, Download } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Badge, Button, DataTable, InlineNotice, PageHeader, Section, StatusBadge, UploadZone } from '../../components/UI';
+import { Button, DataTable, InlineNotice, PageHeader, Section, StatusBadge, UploadZone } from '../../components/UI';
 
 const preview = [
   { row: 2, name: 'Nguyễn An', email: 'nguyenan@hope.edu.vn', role: 'Student', status: 'Valid' },

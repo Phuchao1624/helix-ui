@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Users, Settings, BookOpen, GraduationCap, CalendarDays,
@@ -48,41 +48,72 @@ function inferRole(pathname) {
   if (pathname.startsWith('/admin')) return 'admin';
   if (pathname.startsWith('/coordinator')) return 'coordinator';
   if (pathname.startsWith('/mentor')) return 'mentor';
-  return 'student';
+  if (pathname.startsWith('/student')) return 'student';
+  return null;
 }
 
 export default function AppShell({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const role = inferRole(location.pathname);
-  const roleExperienceNav = role === 'student'
-    ? [
+  const pathRole = inferRole(location.pathname);
+  const [lastRole, setLastRole] = useState(() => typeof window === 'undefined' ? 'student' : window.sessionStorage.getItem('helix-active-role') || 'student');
+  const role = pathRole || lastRole;
+  const nav = useMemo(() => [
+    ...navByRole[role],
+    ...(role === 'student' ? [
       { to: '/student/ai', label: 'AI Practice', icon: Bot },
       { to: '/student/assessments', label: 'Tests', icon: ClipboardList },
-    ]
-    : [];
-  const nav = [...navByRole[role], ...roleExperienceNav, ...(role === 'mentor' ? [{ to: '/mentor/meet', label: 'Meet & Attendance', icon: Video }] : [])];
+    ] : []),
+    ...(role === 'mentor' ? [{ to: '/mentor/meet', label: 'Meet & Attendance', icon: Video }] : []),
+  ], [role]);
   const meta = roleMeta[role];
   const [mobileOpen, setMobileOpen] = useState(false);
   const [roleMenu, setRoleMenu] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const roleMenuRef = useRef(null);
   const activeItem = useMemo(
     () => nav.find((item) => location.pathname === item.to || (item.to !== `/${role}` && location.pathname.startsWith(item.to))) || nav[0],
     [location.pathname, nav, role]
   );
 
   const switchRole = (nextRole) => {
+    setLastRole(nextRole);
+    window.sessionStorage.setItem('helix-active-role', nextRole);
     setRoleMenu(false);
     setMobileOpen(false);
     navigate(`/${nextRole}`);
   };
+
+  const navigateShared = (path) => {
+    setLastRole(role);
+    window.sessionStorage.setItem('helix-active-role', role);
+    setRoleMenu(false);
+    setMobileOpen(false);
+    navigate(path);
+  };
+
+  useEffect(() => {
+    if (!pathRole) return;
+    window.sessionStorage.setItem('helix-active-role', pathRole);
+  }, [pathRole]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); setSearchOpen(true); return; }
+      if (event.key === 'Escape') { setMobileOpen(false); setRoleMenu(false); setSearchOpen(false); }
+    };
+    const handlePointerDown = (event) => { if (roleMenu && !roleMenuRef.current?.contains(event.target)) setRoleMenu(false); };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('pointerdown', handlePointerDown);
+    return () => { window.removeEventListener('keydown', handleKeyDown); window.removeEventListener('pointerdown', handlePointerDown); };
+  }, [roleMenu]);
 
   return (
     <div className="app-shell app-shell--header-nav">
       <header className="global-header">
         <div className="global-header__brand-line" />
         <div className="global-header__inner">
-          <button className="global-header__menu" onClick={() => setMobileOpen((v) => !v)} aria-label="Mở điều hướng">
+          <button className="global-header__menu" onClick={() => setMobileOpen((v) => !v)} aria-label={mobileOpen ? 'Đóng điều hướng' : 'Mở điều hướng'} aria-expanded={mobileOpen} aria-controls="mobile-navigation">
             {mobileOpen ? <X size={21} /> : <Menu size={21} />}
           </button>
 
@@ -109,23 +140,23 @@ export default function AppShell({ children }) {
           </nav>
 
           <div className="global-header__tools">
-            <button className={`header-search ${searchOpen ? 'is-open' : ''}`} type="button" onClick={() => setSearchOpen((v) => !v)} aria-label="Tìm kiếm">
+            <button className={`header-search ${searchOpen ? 'is-open' : ''}`} type="button" onClick={() => setSearchOpen((v) => !v)} aria-label="Tìm kiếm" aria-expanded={searchOpen} aria-controls="global-search">
               <Search size={18} />
               <span>Tìm kiếm</span>
               <kbd>⌘ K</kbd>
             </button>
-            <button className="header-icon" onClick={() => navigate('/notifications')} aria-label="Thông báo">
+            <button className="header-icon" onClick={() => navigateShared('/notifications')} aria-label="Thông báo">
               <Bell size={19} />
               <i />
             </button>
-            <div className="header-profile">
-              <button type="button" onClick={() => setRoleMenu((v) => !v)} aria-expanded={roleMenu}>
+            <div className="header-profile" ref={roleMenuRef}>
+              <button type="button" onClick={() => setRoleMenu((v) => !v)} aria-expanded={roleMenu} aria-haspopup="menu" aria-controls="role-menu">
                 <span className="avatar avatar--small">{meta.initials}</span>
                 <span className="header-profile__copy"><strong>{meta.name}</strong><small>{meta.role}</small></span>
                 <ChevronDown size={16} />
               </button>
               {roleMenu ? (
-                <div className="role-menu role-menu--header">
+                <div className="role-menu role-menu--header" id="role-menu" role="menu">
                   <span>Xem demo theo vai trò</span>
                   {Object.entries(roleMeta).map(([key, value]) => (
                     <button key={key} className={role === key ? 'is-active' : ''} onClick={() => switchRole(key)}>
@@ -135,7 +166,7 @@ export default function AppShell({ children }) {
                     </button>
                   ))}
                   <div className="role-menu__divider" />
-                  <button onClick={() => navigate('/profile')}><UserRound size={16} /><span><strong>Hồ sơ cá nhân</strong><small>Cài đặt tài khoản</small></span></button>
+                  <button onClick={() => navigateShared('/profile')}><UserRound size={16} /><span><strong>Hồ sơ cá nhân</strong><small>Cài đặt tài khoản</small></span></button>
                   <button onClick={() => navigate('/login')}><LogOut size={16} /><span><strong>Đăng xuất</strong><small>Kết thúc phiên làm việc</small></span></button>
                 </div>
               ) : null}
@@ -143,7 +174,7 @@ export default function AppShell({ children }) {
           </div>
         </div>
 
-        <div className={`mobile-nav-panel ${mobileOpen ? 'is-open' : ''}`}>
+        <div className={`mobile-nav-panel ${mobileOpen ? 'is-open' : ''}`} id="mobile-navigation" hidden={!mobileOpen}>
           <div className="mobile-nav-panel__context">
             <span>{meta.role}</span>
             <strong>{activeItem.label}</strong>
@@ -154,14 +185,14 @@ export default function AppShell({ children }) {
                 <Icon size={19} /><span>{label}</span><ChevronRight size={17} />
               </NavLink>
             ))}
-            <NavLink to="/notifications" onClick={() => setMobileOpen(false)}><Bell size={19} /><span>Thông báo</span><b>2</b></NavLink>
-            <NavLink to="/profile" onClick={() => setMobileOpen(false)}><UserRound size={19} /><span>Hồ sơ cá nhân</span><ChevronRight size={17} /></NavLink>
+            <NavLink to="/notifications" onClick={() => { setLastRole(role); window.sessionStorage.setItem('helix-active-role', role); setMobileOpen(false); }}><Bell size={19} /><span>Thông báo</span><b>2</b></NavLink>
+            <NavLink to="/profile" onClick={() => { setLastRole(role); window.sessionStorage.setItem('helix-active-role', role); setMobileOpen(false); }}><UserRound size={19} /><span>Hồ sơ cá nhân</span><ChevronRight size={17} /></NavLink>
           </nav>
         </div>
       </header>
 
       {searchOpen ? (
-        <div className="search-popover">
+        <div className="search-popover" id="global-search" role="search">
           <Search size={19} />
           <input autoFocus aria-label="Tìm kiếm trong HELIX" placeholder="Tìm lớp học, học sinh, bài tập…" />
           <button onClick={() => setSearchOpen(false)}>Đóng</button>

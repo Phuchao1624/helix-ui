@@ -7,7 +7,10 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:routes": "node scripts/render-previews.mjs",
+    "test:e2e": "node scripts/browser-audit.mjs",
+    "test": "npm run test:routes && npm run test:e2e"
   },
   "dependencies": {
     "@vitejs/plugin-react": "5.2.0",
@@ -17,5 +20,11 @@
     "react-router-dom": "6.22.3",
     "vite": "7.3.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.7.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.7.0",
+    "playwright-core": "^1.61.1"
+  }
 }

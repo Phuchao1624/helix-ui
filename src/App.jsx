@@ -58,7 +58,7 @@ export default function App() {
 
       <Route path="/:role/ai" element={<StudentOnlyExperience mode="ai" />} />
       <Route path="/:role/assessments" element={<StudentOnlyExperience mode="assessments" />} />
-      <Route path="/:role/meet" element={<Shell><ExperienceHubPage mode="meet" /></Shell>} />
+      <Route path="/mentor/meet" element={<Shell><ExperienceHubPage mode="meet" /></Shell>} />
       <Route path="/:role/wallet" element={<Shell><ExperienceHubPage mode="wallet" /></Shell>} />
 
       <Route path="/profile" element={<Shell><ProfileSettingsPage /></Shell>} />

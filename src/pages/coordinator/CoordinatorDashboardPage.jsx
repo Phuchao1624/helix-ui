@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, ArrowRight, CalendarDays, Layers3, Plus, School } from 'lucide-react';
+import { AlertTriangle, ArrowRight, CalendarDays, Plus, School } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button, DataTable, MetricStrip, PageHeader, Progress, Section, StatusBadge } from '../../components/UI';
 import { classes, programs } from '../../data/mockData';

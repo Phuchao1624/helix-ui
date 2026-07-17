@@ -13,7 +13,7 @@ This repository contains the complete frontend implementation of the HELIX MVP, 
 ## Product highlights
 
 - A public welcome page for unauthenticated visitors.
-- Centered, animated HELIX login experience with role preview.
+- Centered HELIX login experience with role preview and a calm first paint.
 - Role-based workspaces for Admin, Coordinator, Mentor, and Student.
 - Student-only AI Practice and Tests experiences.
 - Mentor-only Google Meet and attendance workspace.
@@ -154,6 +154,17 @@ npm run build
 
 The optimized output is generated in `dist/`.
 
+## Quality checks
+
+```bash
+npm run lint
+npm run test:routes
+npm run test:e2e
+npm run build
+```
+
+The E2E audit uses Playwright Core with the locally installed Google Chrome. It covers real mobile, tablet, and desktop viewports; core keyboard interactions; horizontal overflow; unnamed controls; console errors; and final screenshots in `artifacts/final/`.
+
 ## Data and persistence
 
 HELIX uses a shared mock store in `src/data/store.js` and seed data in `src/data/mockData.js`.
@@ -172,7 +183,7 @@ To reset the demo state, clear the site data for the local Vite origin in the br
 ## Design principles
 
 - **Clear before clever:** content hierarchy comes first.
-- **Warm, academic, and operational:** Hope School blue anchors the interface; orange is reserved for primary actions.
+- **Warm, academic, and operational:** Hope School blue anchors navigation and primary actions; orange remains a limited logo and status accent.
 - **Structured surfaces:** layouts use clean panels, borders, tables, and split views instead of excessive cards.
 - **Confident motion:** subtle transitions provide feedback without distracting from learning tasks.
 - **Responsive by default:** desktop, tablet, and mobile layouts share one visual language.
@@ -180,14 +191,14 @@ To reset the demo state, clear the site data for the local Vite origin in the br
 
 ## Validation
 
-The current frontend has been validated with:
+The repository includes repeatable checks for:
 
-- successful Vite production builds;
-- route coverage for the HELIX MVP screens;
-- role-based navigation checks;
-- Student-only access checks for AI Practice and Tests;
-- responsive CSS rules for desktop, tablet, and mobile breakpoints;
-- empty, loading, success, error, validation, and confirmation states across core workflows.
+- successful Vite production builds and SSR smoke renders for every registered experience;
+- ESLint checks for source and automation scripts;
+- role-aware navigation and Student-only access checks for AI Practice and Tests;
+- mobile menu, keyboard tab navigation, modal Escape handling, and demo sign-in;
+- responsive screenshots at mobile, tablet, and desktop viewports;
+- horizontal overflow, unnamed controls, page errors, and browser console errors.
 
 ## Backend integration boundary
 

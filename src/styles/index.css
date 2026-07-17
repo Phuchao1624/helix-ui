@@ -1233,6 +1233,79 @@ input, textarea, select { border-radius: 3px; }
 
 .auth-brand-link, .public-home__logo-button { position: relative; z-index: 10; display: inline-flex; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; text-decoration: none; }
 .auth-brand-link { min-width: 220px; min-height: 62px; align-items: center; }
+
+/* Production polish: Hope blue leads actions; orange remains a small brand accent. */
+:root {
+  --blue-500: #1698cf;
+  --blue-200: #b9deee;
+  --action: #0877a7;
+  --action-hover: #075985;
+}
+
+[hidden] { display: none !important; }
+body { overflow-x: hidden; }
+.button--primary { background: var(--action); border-color: var(--action); color: #fff; }
+.button--primary:hover:not(:disabled) { background: var(--action-hover); border-color: var(--action-hover); }
+.global-header__brand-line::after { background: var(--blue-900); }
+.page-header--welcome::before, .student-hero::before { background: #73c5e5; }
+.student-welcome__focus { border-left-color: var(--blue-600); }
+.header-icon i { background: var(--red-700); }
+.mobile-nav-panel a b { background: var(--blue-800); }
+
+/* The public entry is editorial, not a floating SaaS-dashboard hero. */
+.public-home__hero { grid-template-columns: 1fr; align-items: start; gap: 34px; padding: 64px 0 74px; }
+.public-home__copy { max-width: 1050px; }
+.public-home__copy h1 { max-width: 900px; font-size: clamp(56px, 6.3vw, 92px); line-height: .9; }
+.public-home__copy p { max-width: 680px; }
+.public-home__visual { min-height: 0; display: block; }
+.public-home__visual::before, .public-home__orb { display: none; }
+.public-home__window { width: 100%; min-height: 0; padding: 22px 26px; border-radius: 4px; background: #fff; box-shadow: none; transform: none; }
+.public-home__window-content { grid-template-columns: 1.45fr .55fr; padding: 28px 12px 24px; }
+.public-home__cards span { border-radius: 3px; }
+.public-home__progress strong { color: var(--blue-800); }
+.public-home__features { grid-template-columns: repeat(4, 1fr); }
+
+/* Authentication stays calm and immediately readable on first paint. */
+.auth-layout__panel-inner { animation: none; }
+.auth-layout__panel::before, .auth-layout__panel::after, .auth-layout__brand::after { display: none; }
+.auth-layout--centered .auth-layout__panel-inner { background: #f8fbfc; }
+.auth-panel-art__task, .auth-panel-art__stats span { background: rgba(255,255,255,.07); }
+
+/* Learning experiences use restrained surfaces and purposeful interaction. */
+.experience-hero, .assessment-hero, .meet-hero, .ai-hero { border-radius: 4px; }
+.ai-hero { background: var(--blue-50); }
+.ai-hero h2 em { color: var(--blue-700); }
+.token-balance { color: var(--blue-800); background: var(--blue-50); border-color: var(--blue-200); }
+.token-balance span { color: var(--blue-700); }
+.ai-hero__orb { border-radius: 4px; border-color: var(--blue-200); box-shadow: none; background: #fff; color: var(--blue-800); }
+.ai-hero__orb i { background: var(--blue-600); }
+.ai-hero__orb i:nth-last-child(2) { background: var(--green-700); }
+.meet-hero { background: var(--blue-900); }
+.skill-card, .assessment-grid article, .mistake-grid article, .token-pack-grid article { border-radius: 4px; }
+.skill-card:hover, .skill-card.is-active { box-shadow: none; transform: none; }
+.skill-card__icon, .mistake-icon { border-radius: 3px; }
+.skill-card--orange .skill-card__icon { color: var(--blue-800); background: var(--blue-100); }
+.mistake-list b { color: var(--blue-800); }
+
+@media (max-width: 780px) {
+  .app-shell--header-nav .page-content { min-width: 0; overflow: hidden; }
+  .student-welcome, .student-welcome > div { min-width: 0; width: 100%; }
+  .student-welcome p, .student-hero p { overflow-wrap: anywhere; }
+  .public-home__hero { padding-top: 34px; }
+  .public-home__copy h1 { font-size: clamp(48px, 14vw, 68px); }
+  .public-home__window-content { grid-template-columns: 1fr; }
+  .public-home__progress { padding: 20px 0 0; border-left: 0; border-top: 1px solid var(--line); }
+  .public-home__features { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 560px) {
+  .header-profile { display: none; }
+  .global-header__tools { margin-left: auto; }
+  .student-welcome h1 { font-size: clamp(31px, 9.5vw, 38px); }
+  .student-hero h2 { font-size: clamp(42px, 13vw, 52px); overflow-wrap: anywhere; }
+  .public-home__features { grid-template-columns: 1fr; }
+  .public-home__window { padding: 16px; }
+}
 .auth-brand-link *, .public-home__logo-button * { text-decoration: none; }
 .auth-brand-link:focus-visible, .public-home__logo-button:focus-visible { outline: 3px solid rgba(255,255,255,.55); outline-offset: 7px; }
 .public-home__logo-button:focus-visible { outline-color: rgba(19,129,181,.35); }
