@@ -34,7 +34,7 @@ try {
     ['admin-overview', '/admin'], ['admin-users', '/admin/users'], ['admin-user-new', '/admin/users/new'], ['admin-user-import', '/admin/users/import'], ['admin-config', '/admin/config'],
     ['coordinator-overview', '/coordinator'], ['coordinator-programs', '/coordinator/programs'], ['coordinator-program-detail', '/coordinator/programs/PRG-01'], ['coordinator-courses', '/coordinator/courses'], ['coordinator-classes', '/coordinator/classes'], ['coordinator-enrollment', '/coordinator/enrollment'],
     ['mentor-overview', '/mentor'], ['mentor-classes', '/mentor/classes'], ['mentor-class-detail', '/mentor/classes/A2-01'], ['mentor-session', '/mentor/session'], ['mentor-attendance', '/mentor/attendance'], ['mentor-materials', '/mentor/materials'], ['mentor-assignments', '/mentor/assignments'], ['mentor-grading', '/mentor/grading'], ['mentor-meet', '/mentor/meet'],
-    ['student-overview', '/student'], ['student-courses', '/student/courses'], ['student-sessions', '/student/sessions'], ['student-assignments', '/student/assignments'], ['student-assignment-detail', '/student/assignments/AS-108'], ['student-grade-feedback', '/student/grades/AS-102'], ['student-ai', '/student/ai'], ['student-assessments', '/student/assessments'],
+    ['student-overview', '/student'], ['student-courses', '/student/courses'], ['student-sessions', '/student/sessions'], ['student-assignments', '/student/assignments'], ['student-assignment-detail', '/student/assignments/AS-108'], ['student-grade-feedback', '/student/grades/AS-102'], ['student-ai', '/student/ai'], ['student-ai-session', '/student/ai/session'], ['student-assessments', '/student/assessments'],
     ['role-guard', '/mentor/ai'], ['not-found', '/route-does-not-exist'],
   ];
   const viewports = [
@@ -90,6 +90,16 @@ try {
   await page.getByRole('button', { name: 'Sign in' }).click();
   await page.waitForURL(/#\/student$/);
   findings.interactions.push('Demo sign-in: passed');
+
+  await page.goto(`${origin}/#/student/ai`, { waitUntil: 'domcontentloaded' });
+  await page.getByRole('button', { name: /Start Speaking/ }).click();
+  await page.waitForURL(/#\/student\/ai\/session$/);
+  await page.getByRole('button', { name: /Bắt đầu hội thoại/ }).click();
+  await page.waitForTimeout(7200);
+  await page.locator('.ai-call__mic.is-active').waitFor();
+  const speakingRoomFits = await page.evaluate(() => document.documentElement.scrollHeight <= window.innerHeight + 1 || getComputedStyle(document.body).overflow === 'hidden');
+  if (!speakingRoomFits) findings.overflow.push('student-ai-session: vertical page scrolling detected');
+  findings.interactions.push('AI speaking session: passed');
 
   const tabRoutes = [
     ['profile', '/profile'], ['notifications', '/notifications'], ['admin-users', '/admin/users'],

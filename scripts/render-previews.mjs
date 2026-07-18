@@ -14,7 +14,7 @@ const routes = [
   '/coordinator','/coordinator/programs','/coordinator/programs/PRG-01','/coordinator/courses','/coordinator/classes','/coordinator/enrollment',
   '/mentor','/mentor/classes','/mentor/classes/a2-01','/mentor/session','/mentor/attendance','/mentor/materials','/mentor/assignments','/mentor/grading','/mentor/meet',
   '/student','/student/courses','/student/sessions','/student/assignments','/student/assignments/as-108','/student/grades/as-102','/student/ai','/student/assessments',
-  '/student/wallet'
+  '/student/wallet','/student/ai/session'
 ];
 
 function render(path) {

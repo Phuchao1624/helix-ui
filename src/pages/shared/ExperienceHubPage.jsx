@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { ArrowRight, BrainCircuit, Check, ChevronRight, Clock3, Coins, Headphones, Mic2, Play, RefreshCw, Sparkles, Target, Video } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Field, PageHeader, Section, StatusBadge, Toast } from '../../components/UI';
 import { useStore } from '../../data/store';
 
@@ -14,11 +14,11 @@ const modes = [
 function roleFromPath(pathname) { return pathname.split('/')[1] || 'student'; }
 
 export default function ExperienceHubPage({ mode = 'ai' }) {
-  const location = useLocation(); const role = roleFromPath(location.pathname); const { data, update } = useStore(); const [activeMode, setActiveMode] = useState('speaking'); const [notice, setNotice] = useState(''); const [running, setRunning] = useState(false); const [meetTitle, setMeetTitle] = useState('');
+  const location = useLocation(); const navigate = useNavigate(); const role = roleFromPath(location.pathname); const { data, update } = useStore(); const [activeMode, setActiveMode] = useState('speaking'); const [notice, setNotice] = useState(''); const [running, setRunning] = useState(false); const [meetTitle, setMeetTitle] = useState('');
   const tokenBalance = data.tokens?.balance ?? 120;
   const mistakes = data.aiMistakes || [{ id: 'm1', skill: 'Speaking', title: 'Final consonants', detail: 'worked / walked / watched', count: 3 }, { id: 'm2', skill: 'Grammar', title: 'Past simple questions', detail: 'Did you…? / Were you…?', count: 2 }, { id: 'm3', skill: 'Vocabulary', title: 'Directions and places', detail: 'opposite · between · across', count: 4 }];
   const tests = data.assessments || [{ id: 'placement', title: 'English placement test', kind: 'Placement', duration: '25 min', level: 'A1 → B2', status: 'Not started' }, { id: 'review-a2', title: 'A2 progress check', kind: 'Review', duration: '15 min', level: 'A2', status: 'Ready' }, { id: 'review-speaking', title: 'Speaking confidence check', kind: 'Practice test', duration: '10 min', level: 'Speaking', status: 'Ready' }];
-  const startPractice = () => { setRunning(true); update('tokens', (current = { balance: tokenBalance }) => ({ ...current, balance: Math.max(0, (current.balance ?? tokenBalance) - 5), spent: (current.spent || 0) + 5 })); setNotice(`${activeMode} practice started · 5 tokens used.`); window.setTimeout(() => setRunning(false), 900); };
+  const startPractice = () => { setRunning(true); update('tokens', (current = { balance: tokenBalance }) => ({ ...current, balance: Math.max(0, (current.balance ?? tokenBalance) - 5), spent: (current.spent || 0) + 5 })); setNotice(`${activeMode} practice started · 5 tokens used.`); window.setTimeout(() => { setRunning(false); navigate('/student/ai/session'); }, 650); };
   const retry = (mistake) => { update('aiMistakes', (items = mistakes) => items.map((item) => item.id === mistake.id ? { ...item, count: Math.max(0, item.count - 1), lastReviewed: 'Just now' } : item)); setNotice(`Reviewing ${mistake.title}.`); };
   const buy = (amount, price) => { update('tokens', (current = { balance: tokenBalance }) => ({ ...current, balance: (current.balance ?? 0) + amount, purchased: (current.purchased || 0) + amount })); setNotice(`${amount} tokens added · payment demo ${price}.`); };
   const createMeet = () => { if (!meetTitle.trim()) return; update('meetings', (items = []) => [{ id: `meet-${Date.now()}`, title: meetTitle, host: role, status: 'Ready', checkIn: 'Auto', createdAt: new Date().toLocaleString() }, ...items]); setMeetTitle(''); setNotice('Google Meet room created.'); };

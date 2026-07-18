@@ -38,6 +38,7 @@ import SessionsPage from './pages/student/SessionsPage';
 import AssignmentListPage from './pages/student/AssignmentListPage';
 import AssignmentDetailPage from './pages/student/AssignmentDetailPage';
 import GradeFeedbackPage from './pages/student/GradeFeedbackPage';
+import AIConversationPage from './pages/student/AIConversationPage';
 
 const Shell = ({ children, view }) => <AppShell><div className={`route-canvas route-canvas--${view}`}>{children}</div></AppShell>;
 
@@ -92,6 +93,7 @@ export default function App() {
       <Route path="/student/assignments" element={<Shell view="student-assignments"><AssignmentListPage /></Shell>} />
       <Route path="/student/assignments/:assignmentId" element={<Shell view="student-assignment-detail"><AssignmentDetailPage /></Shell>} />
       <Route path="/student/grades/:assignmentId" element={<Shell view="student-grade-feedback"><GradeFeedbackPage /></Shell>} />
+      <Route path="/student/ai/session" element={<Shell view="student-ai-session"><AIConversationPage /></Shell>} />
 
       <Route path="*" element={<Navigate to="/student" replace />} />
     </Routes>
