@@ -9,6 +9,7 @@ import FirstLoginSetupPage from './pages/shared/FirstLoginSetupPage';
 import ProfileSettingsPage from './pages/shared/ProfileSettingsPage';
 import NotificationCenterPage from './pages/shared/NotificationCenterPage';
 import ExperienceHubPage from './pages/shared/ExperienceHubPage';
+import WeeklyTimetablePage from './pages/shared/WeeklyTimetablePage';
 
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import UserManagementPage from './pages/admin/UserManagementPage';
@@ -70,6 +71,7 @@ export default function App() {
       <Route path="/admin/users/new" element={<Shell view="admin-user-form"><CreateEditUserPage /></Shell>} />
       <Route path="/admin/users/import" element={<Shell view="admin-user-import"><BulkImportUsersPage /></Shell>} />
       <Route path="/admin/config" element={<Shell view="admin-config"><SystemConfigurationPage /></Shell>} />
+      <Route path="/admin/timetable" element={<Shell view="admin-timetable"><WeeklyTimetablePage role="admin" /></Shell>} />
 
       <Route path="/coordinator" element={<Shell view="coordinator-overview"><CoordinatorDashboardPage /></Shell>} />
       <Route path="/coordinator/programs" element={<Shell view="coordinator-programs"><ProgramsPage /></Shell>} />
@@ -77,6 +79,7 @@ export default function App() {
       <Route path="/coordinator/courses" element={<Shell view="coordinator-courses"><CoursesPage /></Shell>} />
       <Route path="/coordinator/classes" element={<Shell view="coordinator-classes"><ClassesPage /></Shell>} />
       <Route path="/coordinator/enrollment" element={<Shell view="coordinator-enrollment"><EnrollmentPage /></Shell>} />
+      <Route path="/coordinator/timetable" element={<Shell view="coordinator-timetable"><WeeklyTimetablePage role="coordinator" /></Shell>} />
 
       <Route path="/mentor" element={<Shell view="mentor-overview"><MentorDashboardPage /></Shell>} />
       <Route path="/mentor/classes" element={<Shell view="mentor-classes"><MyClassesPage /></Shell>} />
@@ -86,10 +89,12 @@ export default function App() {
       <Route path="/mentor/materials" element={<Shell view="mentor-materials"><MaterialsPage /></Shell>} />
       <Route path="/mentor/assignments" element={<Shell view="mentor-assignments"><AssignmentsPage /></Shell>} />
       <Route path="/mentor/grading" element={<Shell view="mentor-grading"><GradingPage /></Shell>} />
+      <Route path="/mentor/timetable" element={<Shell view="mentor-timetable"><WeeklyTimetablePage role="mentor" /></Shell>} />
 
       <Route path="/student" element={<Shell view="student-overview"><StudentDashboardPage /></Shell>} />
       <Route path="/student/courses" element={<Shell view="student-courses"><MyCoursesPage /></Shell>} />
       <Route path="/student/sessions" element={<Shell view="student-sessions"><SessionsPage /></Shell>} />
+      <Route path="/student/timetable" element={<Shell view="student-timetable"><WeeklyTimetablePage role="student" /></Shell>} />
       <Route path="/student/assignments" element={<Shell view="student-assignments"><AssignmentListPage /></Shell>} />
       <Route path="/student/assignments/:assignmentId" element={<Shell view="student-assignment-detail"><AssignmentDetailPage /></Shell>} />
       <Route path="/student/grades/:assignmentId" element={<Shell view="student-grade-feedback"><GradeFeedbackPage /></Shell>} />

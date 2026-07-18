@@ -11,37 +11,41 @@ import { Bot, ClipboardList, Video } from 'lucide-react';
 
 const navByRole = {
   admin: [
-    { to: '/admin', label: 'Tổng quan', icon: LayoutDashboard },
-    { to: '/admin/users', label: 'Người dùng', icon: Users },
-    { to: '/admin/config', label: 'Cấu hình hệ thống', icon: Settings },
+    { to: '/admin', label: 'Overview', icon: LayoutDashboard },
+    { to: '/admin/users', label: 'Users', icon: Users },
+    { to: '/admin/timetable', label: 'System schedule', icon: CalendarDays },
+    { to: '/admin/config', label: 'System settings', icon: Settings },
   ],
   coordinator: [
-    { to: '/coordinator', label: 'Tổng quan', icon: LayoutDashboard },
-    { to: '/coordinator/programs', label: 'Chương trình', icon: Layers3 },
-    { to: '/coordinator/courses', label: 'Khoá học', icon: BookOpen },
-    { to: '/coordinator/classes', label: 'Lớp học', icon: School },
-    { to: '/coordinator/enrollment', label: 'Ghi danh', icon: UserPlus },
+    { to: '/coordinator', label: 'Overview', icon: LayoutDashboard },
+    { to: '/coordinator/programs', label: 'Programs', icon: Layers3 },
+    { to: '/coordinator/courses', label: 'Courses', icon: BookOpen },
+    { to: '/coordinator/classes', label: 'Classes', icon: School },
+    { to: '/coordinator/enrollment', label: 'Enrollment', icon: UserPlus },
+    { to: '/coordinator/timetable', label: 'Scheduling', icon: CalendarDays },
   ],
   mentor: [
-    { to: '/mentor', label: 'Tổng quan', icon: LayoutDashboard },
-    { to: '/mentor/classes', label: 'Lớp của tôi', icon: School },
-    { to: '/mentor/materials', label: 'Học liệu', icon: FolderOpen },
-    { to: '/mentor/assignments', label: 'Bài tập', icon: ClipboardCheck },
-    { to: '/mentor/grading', label: 'Chấm bài', icon: FileCheck2 },
+    { to: '/mentor', label: 'Overview', icon: LayoutDashboard },
+    { to: '/mentor/classes', label: 'My classes', icon: School },
+    { to: '/mentor/timetable', label: 'Teaching schedule', icon: CalendarDays },
+    { to: '/mentor/materials', label: 'Materials', icon: FolderOpen },
+    { to: '/mentor/assignments', label: 'Assignments', icon: ClipboardCheck },
+    { to: '/mentor/grading', label: 'Grading', icon: FileCheck2 },
   ],
   student: [
-    { to: '/student', label: 'Hôm nay', icon: LayoutDashboard },
-    { to: '/student/courses', label: 'Khoá học', icon: BookOpen },
-    { to: '/student/sessions', label: 'Buổi học', icon: CalendarDays },
-    { to: '/student/assignments', label: 'Bài tập', icon: ListChecks },
+    { to: '/student', label: 'Today', icon: LayoutDashboard },
+    { to: '/student/courses', label: 'Courses', icon: BookOpen },
+    { to: '/student/sessions', label: 'Sessions', icon: CalendarDays },
+    { to: '/student/timetable', label: 'Weekly schedule', icon: CalendarDays },
+    { to: '/student/assignments', label: 'Assignments', icon: ListChecks },
   ],
 };
 
 const roleMeta = {
-  admin: { name: 'Nguyễn Khánh Linh', role: 'Quản trị viên', shortRole: 'Admin', initials: 'KL' },
-  coordinator: { name: 'Phạm Thu Hà', role: 'Điều phối viên', shortRole: 'Điều phối', initials: 'TH' },
-  mentor: { name: 'Lê Hoàng Nam', role: 'Mentor tiếng Anh', shortRole: 'Mentor', initials: 'HN' },
-  student: { name: 'Nguyễn Minh Anh', role: 'Học sinh · Lớp A2-01', shortRole: 'Học sinh', initials: 'MA' },
+  admin: { name: 'Nguyen Khanh Linh', role: 'Administrator', shortRole: 'Admin', initials: 'KL' },
+  coordinator: { name: 'Pham Thu Ha', role: 'Coordinator', shortRole: 'Coordinator', initials: 'TH' },
+  mentor: { name: 'Le Hoang Nam', role: 'English mentor', shortRole: 'Mentor', initials: 'HN' },
+  student: { name: 'Nguyen Minh Anh', role: 'Student - Class A2-01', shortRole: 'Student', initials: 'MA' },
 };
 
 function inferRole(pathname) {
@@ -113,20 +117,20 @@ export default function AppShell({ children }) {
       <header className="global-header">
         <div className="global-header__brand-line" />
         <div className="global-header__inner">
-          <button className="global-header__menu" onClick={() => setMobileOpen((v) => !v)} aria-label={mobileOpen ? 'Đóng điều hướng' : 'Mở điều hướng'} aria-expanded={mobileOpen} aria-controls="mobile-navigation">
+          <button className="global-header__menu" onClick={() => setMobileOpen((v) => !v)} aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileOpen} aria-controls="mobile-navigation">
             {mobileOpen ? <X size={21} /> : <Menu size={21} />}
           </button>
 
-          <button className="global-header__logo" type="button" onClick={() => navigate(`/${role}`)} aria-label="Về trang tổng quan">
+          <button className="global-header__logo" type="button" onClick={() => navigate(`/${role}`)} aria-label="Go to overview">
             <BrandLogo compact />
           </button>
 
-          <div className="global-header__role" aria-label={`Không gian ${meta.role}`}>
-            <span>Không gian</span>
+          <div className="global-header__role" aria-label={`${meta.role} workspace`}>
+            <span>Workspace</span>
             <strong>{meta.shortRole}</strong>
           </div>
 
-          <nav className="global-nav" aria-label="Điều hướng chính">
+          <nav className="global-nav" aria-label="Primary navigation">
             {nav.map(({ to, label }) => (
               <NavLink
                 key={to}
@@ -140,12 +144,12 @@ export default function AppShell({ children }) {
           </nav>
 
           <div className="global-header__tools">
-            <button className={`header-search ${searchOpen ? 'is-open' : ''}`} type="button" onClick={() => setSearchOpen((v) => !v)} aria-label="Tìm kiếm" aria-expanded={searchOpen} aria-controls="global-search">
+            <button className={`header-search ${searchOpen ? 'is-open' : ''}`} type="button" onClick={() => setSearchOpen((v) => !v)} aria-label="Search" aria-expanded={searchOpen} aria-controls="global-search">
               <Search size={18} />
-              <span>Tìm kiếm</span>
+              <span>Search</span>
               <kbd>⌘ K</kbd>
             </button>
-            <button className="header-icon" onClick={() => navigateShared('/notifications')} aria-label="Thông báo">
+            <button className="header-icon" onClick={() => navigateShared('/notifications')} aria-label="Notifications">
               <Bell size={19} />
               <i />
             </button>
@@ -157,7 +161,7 @@ export default function AppShell({ children }) {
               </button>
               {roleMenu ? (
                 <div className="role-menu role-menu--header" id="role-menu" role="menu">
-                  <span>Xem demo theo vai trò</span>
+                  <span>Preview by role</span>
                   {Object.entries(roleMeta).map(([key, value]) => (
                     <button key={key} className={role === key ? 'is-active' : ''} onClick={() => switchRole(key)}>
                       {key === 'admin' ? <Settings size={16} /> : key === 'coordinator' ? <ArrowLeftRight size={16} /> : key === 'mentor' ? <GraduationCap size={16} /> : <BookOpen size={16} />}
@@ -166,8 +170,8 @@ export default function AppShell({ children }) {
                     </button>
                   ))}
                   <div className="role-menu__divider" />
-                  <button onClick={() => navigateShared('/profile')}><UserRound size={16} /><span><strong>Hồ sơ cá nhân</strong><small>Cài đặt tài khoản</small></span></button>
-                  <button onClick={() => navigate('/login')}><LogOut size={16} /><span><strong>Đăng xuất</strong><small>Kết thúc phiên làm việc</small></span></button>
+                  <button onClick={() => navigateShared('/profile')}><UserRound size={16} /><span><strong>Profile</strong><small>Account settings</small></span></button>
+                  <button onClick={() => navigate('/login')}><LogOut size={16} /><span><strong>Sign out</strong><small>End this session</small></span></button>
                 </div>
               ) : null}
             </div>
@@ -179,14 +183,14 @@ export default function AppShell({ children }) {
             <span>{meta.role}</span>
             <strong>{activeItem.label}</strong>
           </div>
-          <nav aria-label="Điều hướng trên thiết bị di động">
+          <nav aria-label="Mobile navigation">
             {nav.map(({ to, label, icon: Icon }) => (
               <NavLink key={to} to={to} end={to === `/${role}`} onClick={() => setMobileOpen(false)} className={({ isActive }) => isActive ? 'is-active' : ''}>
                 <Icon size={19} /><span>{label}</span><ChevronRight size={17} />
               </NavLink>
             ))}
-            <NavLink to="/notifications" onClick={() => { setLastRole(role); window.sessionStorage.setItem('helix-active-role', role); setMobileOpen(false); }}><Bell size={19} /><span>Thông báo</span><b>2</b></NavLink>
-            <NavLink to="/profile" onClick={() => { setLastRole(role); window.sessionStorage.setItem('helix-active-role', role); setMobileOpen(false); }}><UserRound size={19} /><span>Hồ sơ cá nhân</span><ChevronRight size={17} /></NavLink>
+            <NavLink to="/notifications" onClick={() => { setLastRole(role); window.sessionStorage.setItem('helix-active-role', role); setMobileOpen(false); }}><Bell size={19} /><span>Notifications</span><b>2</b></NavLink>
+            <NavLink to="/profile" onClick={() => { setLastRole(role); window.sessionStorage.setItem('helix-active-role', role); setMobileOpen(false); }}><UserRound size={19} /><span>Profile</span><ChevronRight size={17} /></NavLink>
           </nav>
         </div>
       </header>
@@ -194,8 +198,8 @@ export default function AppShell({ children }) {
       {searchOpen ? (
         <div className="search-popover" id="global-search" role="search">
           <Search size={19} />
-          <input autoFocus aria-label="Tìm kiếm trong HELIX" placeholder="Tìm lớp học, học sinh, bài tập…" />
-          <button onClick={() => setSearchOpen(false)}>Đóng</button>
+          <input autoFocus aria-label="Search HELIX" placeholder="Search classes, students, assignments..." />
+          <button onClick={() => setSearchOpen(false)}>Close</button>
         </div>
       ) : null}
 
@@ -204,7 +208,7 @@ export default function AppShell({ children }) {
       </div>
 
       {role === 'student' ? (
-        <nav className="bottom-nav" aria-label="Điều hướng học sinh">
+        <nav className="bottom-nav" aria-label="Student navigation">
           {nav.slice(0, 4).map(({ to, label, icon: Icon }) => (
             <NavLink key={to} to={to} end={to === '/student'} className={({ isActive }) => isActive ? 'is-active' : ''}>
               <Icon size={20} /><span>{label}</span>

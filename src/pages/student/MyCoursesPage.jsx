@@ -5,8 +5,8 @@ import { Button, EmptyState, Progress, SearchField, StatusBadge } from '../../co
 import { useStore } from '../../data/store';
 
 const coursePresentation = {
-  'ENG-A2': { progress: 64, sessions: '12 of 24 sessions', lesson: 'Unit 6 · Giving directions', duration: '24 min', className: 'A2-01', mentor: 'Lê Hoàng Nam', next: 'Thu, 16 Jul · 19:00', icon: MapPinned, theme: 'directions' },
-  'ENG-B1': { progress: 35, sessions: '4 of 12 sessions', lesson: 'Speaking with confidence', duration: '18 min', className: 'B1-01', mentor: 'Đặng Quốc Bảo', next: 'Wed, 16 Jul · 19:30', icon: MessageCircle, theme: 'conversation' },
+  'ENG-A2': { progress: 64, sessions: '12 of 24 sessions', lesson: 'Unit 6 · Giving directions', duration: '24 min', className: 'A2-01', mentor: 'Le Hoang Nam', next: 'Thu, 16 Jul · 19:00', icon: MapPinned, theme: 'directions' },
+  'ENG-B1': { progress: 35, sessions: '4 of 12 sessions', lesson: 'Speaking with confidence', duration: '18 min', className: 'B1-01', mentor: 'Dang Quoc Bao', next: 'Wed, 16 Jul · 19:30', icon: MessageCircle, theme: 'conversation' },
   'IELTS-01': { progress: 12, sessions: 'Preview available', lesson: 'Course plan in review', duration: '—', className: 'Planning', mentor: 'Course team', next: 'Schedule to be confirmed', icon: PenLine, theme: 'writing' },
 };
 

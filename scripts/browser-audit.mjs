@@ -34,7 +34,7 @@ try {
     ['admin-overview', '/admin'], ['admin-users', '/admin/users'], ['admin-user-new', '/admin/users/new'], ['admin-user-import', '/admin/users/import'], ['admin-config', '/admin/config'],
     ['coordinator-overview', '/coordinator'], ['coordinator-programs', '/coordinator/programs'], ['coordinator-program-detail', '/coordinator/programs/PRG-01'], ['coordinator-courses', '/coordinator/courses'], ['coordinator-classes', '/coordinator/classes'], ['coordinator-enrollment', '/coordinator/enrollment'],
     ['mentor-overview', '/mentor'], ['mentor-classes', '/mentor/classes'], ['mentor-class-detail', '/mentor/classes/A2-01'], ['mentor-session', '/mentor/session'], ['mentor-attendance', '/mentor/attendance'], ['mentor-materials', '/mentor/materials'], ['mentor-assignments', '/mentor/assignments'], ['mentor-grading', '/mentor/grading'], ['mentor-meet', '/mentor/meet'],
-    ['student-overview', '/student'], ['student-courses', '/student/courses'], ['student-sessions', '/student/sessions'], ['student-assignments', '/student/assignments'], ['student-assignment-detail', '/student/assignments/AS-108'], ['student-grade-feedback', '/student/grades/AS-102'], ['student-ai', '/student/ai'], ['student-ai-session', '/student/ai/session'], ['student-assessments', '/student/assessments'],
+    ['student-overview', '/student'], ['student-courses', '/student/courses'], ['student-sessions', '/student/sessions'], ['student-timetable', '/student/timetable'], ['mentor-timetable', '/mentor/timetable'], ['coordinator-timetable', '/coordinator/timetable'], ['admin-timetable', '/admin/timetable'], ['student-assignments', '/student/assignments'], ['student-assignment-detail', '/student/assignments/AS-108'], ['student-grade-feedback', '/student/grades/AS-102'], ['student-ai', '/student/ai'], ['student-ai-session', '/student/ai/session'], ['student-assessments', '/student/assessments'],
     ['role-guard', '/mentor/ai'], ['not-found', '/route-does-not-exist'],
   ];
   const viewports = [
@@ -67,8 +67,8 @@ try {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
   const page = await context.newPage();
   await page.goto(`${origin}/#/student`, { waitUntil: 'domcontentloaded' });
-  await page.getByRole('button', { name: 'Mở điều hướng' }).click();
-  await page.getByLabel('Điều hướng trên thiết bị di động').getByRole('link', { name: 'Khoá học' }).click();
+  await page.getByRole('button', { name: 'Open navigation' }).click();
+  await page.getByLabel('Mobile navigation').getByRole('link', { name: 'Courses' }).click();
   await page.waitForURL(/#\/student\/courses/);
   findings.interactions.push('Mobile navigation: passed');
 
@@ -76,7 +76,7 @@ try {
   const activeTab = page.getByRole('tab', { selected: true });
   await activeTab.focus();
   await activeTab.press('ArrowRight');
-  if (await page.getByRole('tab', { name: 'Cần làm' }).getAttribute('aria-selected') !== 'true') throw new Error('Arrow-key tab navigation failed.');
+  if (await page.getByRole('tab', { name: 'To do' }).getAttribute('aria-selected') !== 'true') throw new Error('Arrow-key tab navigation failed.');
   findings.interactions.push('Keyboard tabs: passed');
 
   await page.goto(`${origin}/#/coordinator/programs`, { waitUntil: 'domcontentloaded' });
@@ -94,7 +94,7 @@ try {
   await page.goto(`${origin}/#/student/ai`, { waitUntil: 'domcontentloaded' });
   await page.getByRole('button', { name: /Start Speaking/ }).click();
   await page.waitForURL(/#\/student\/ai\/session$/);
-  await page.getByRole('button', { name: /Bắt đầu hội thoại/ }).click();
+  await page.getByRole('button', { name: /Start conversation/ }).click();
   await page.waitForTimeout(7200);
   await page.locator('.ai-call__mic.is-active').waitFor();
   const speakingRoomFits = await page.evaluate(() => document.documentElement.scrollHeight <= window.innerHeight + 1 || getComputedStyle(document.body).overflow === 'hidden');
@@ -108,6 +108,18 @@ try {
     ['student-assignments', '/student/assignments'],
   ];
   await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(`${origin}/#/coordinator/timetable`, { waitUntil: 'domcontentloaded' });
+  await page.getByRole('button', { name: 'Create session', exact: true }).click();
+  const scheduleDialog = page.getByRole('dialog');
+  await scheduleDialog.getByLabel('Lesson title').fill('Browser audit lesson');
+  await scheduleDialog.getByLabel('Start time').fill('09:15');
+  await scheduleDialog.getByLabel('End time').fill('10:45');
+  await scheduleDialog.getByRole('button', { name: 'Create session' }).click();
+  await page.getByText('Session created successfully.').waitFor();
+  await page.locator('.timetable-scroll .timetable-session.is-editable[aria-label*="Browser audit lesson"]').click();
+  await page.getByRole('heading', { name: 'Edit session' }).waitFor();
+  await page.keyboard.press('Escape');
+  findings.interactions.push('Coordinator schedule create/edit: passed');
   for (const [name, route] of tabRoutes) {
     await page.goto(`${origin}/#${route}`, { waitUntil: 'domcontentloaded' });
     const tabs = page.getByRole('tab');

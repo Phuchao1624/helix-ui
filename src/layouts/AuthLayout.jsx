@@ -7,7 +7,7 @@ export default function AuthLayout({ children, title = 'Every lesson is a step f
   return <div className={`auth-layout ${centered ? 'auth-layout--centered' : ''}`}>
     <section className="auth-layout__brand">
       <div className="auth-layout__brand-inner">
-        <div className="auth-layout__brand-top"><a className="auth-brand-link" href="/#/welcome" onClick={goWelcome} aria-label="Về trang chào mừng HELIX"><BrandLogo inverse /></a><span>HOPE SCHOOL · 2026</span></div>
+        <div className="auth-layout__brand-top"><a className="auth-brand-link" href="/#/welcome" onClick={goWelcome} aria-label="Go to the HELIX welcome page"><BrandLogo inverse /></a><span>HOPE SCHOOL · 2026</span></div>
         <div className="auth-layout__message"><span className="auth-kicker">HOPE ENGLISH LEARNING EXPERIENCE</span><h1>{title}</h1><p>{note}</p><div className="auth-layout__signature"><span /> Learn with intent · Grow with confidence</div></div>
         <div className="auth-feature-row" aria-label="HELIX features"><div><BookOpenCheck size={20} /><span><strong>Learn in rhythm</strong><small>Sessions and assignments in one calm flow.</small></span></div><div><LineChart size={20} /><span><strong>See progress</strong><small>Every milestone is visible and meaningful.</small></span></div><div><HeartHandshake size={20} /><span><strong>Stay supported</strong><small>Mentor feedback is part of the journey.</small></span></div></div>
       </div>
